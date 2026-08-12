@@ -15,7 +15,7 @@
     {
       "customType": "regex",
       "managerFilePatterns": [
-        "/^.*docker-compose\\.json$/"
+        "/^.*docker-compose\\.yml$/"
       ],
       "matchStrings": [
         "\"image\": \"(?<depName>.*?):(?<currentValue>.*?)\","
