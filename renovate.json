@@ -1,53 +1,29 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "automerge": false,
-  "extends": [
-    "config:recommended"
-  ],
-  "addLabels": [
-    "renovate"
-  ],
-  "enabledManagers": [
-    "custom.regex"
-  ],
-  "automergeStrategy": "rebase",
+  "prHourlyLimit": 20,
+  "extends": ["config:recommended"],
+  "rebaseWhen": "conflicted",
+  "enabledManagers": ["custom.regex"],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": [
-        "/^.*docker-compose\\.yml$/"
-      ],
-      "matchStrings": [
-        "\"image\": \"(?<depName>.*?):(?<currentValue>.*?)\","
-      ],
+      "managerFilePatterns": ["/^.*docker-compose\\.ya?ml$/"],
+      "matchStrings": ["image:\\s+[\"']?(?<depName>.*?):(?<currentValue>[^\"'\\s]+)[\"']?"],
       "datasourceTemplate": "docker"
     }
   ],
   "packageRules": [
     {
-      "matchUpdateTypes": [
-        "minor",
-        "major",
-        "patch",
-        "pin",
-        "digest"
-      ],
-      "automerge": false
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major"]
     },
     {
-      "matchDepTypes": [
-        "devDependencies"
-      ],
-      "automerge": false
+      "matchUpdateTypes": ["minor", "patch"],
+      "addLabels": ["automerge"]
     },
     {
-      "matchPackageNames": [
-        "mariadb",
-        "mysql",
-        "monogdb",
-        "postgres",
-        "redis"
-      ],
+      "matchPackageNames": ["mariadb", "mysql", "mongodb", "postgres", "redis"],
       "enabled": false
     }
   ],
@@ -56,9 +32,7 @@
       "bun ./scripts/update-config.ts {{packageFile}} {{newVersion}}",
       "bun install && bun run test"
     ],
-    "fileFilters": [
-      "**/*"
-    ],
+    "fileFilters": ["**/*"],
     "executionMode": "update"
   }
 }
